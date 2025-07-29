@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data fetched successfully',
-            'data' => User::all(),
+            'data' => Contact::all(),
         ]);
     }
 
