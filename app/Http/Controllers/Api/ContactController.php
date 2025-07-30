@@ -8,47 +8,35 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Data fetched successfully',
-            'data' => Contact::all(),
+        return Contact::where('user_id', $request->user()->id)->latest()->get();
+    }
+
+    public function store(Request $request)
+    {
+        return Contact::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'user_id' => $request->user()->id,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Contact $contact)
     {
-        //
+        return $contact;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, Contact $contact)
     {
-        //
+        return $contact->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Contact $contact)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return $contact->delete();
     }
 }
