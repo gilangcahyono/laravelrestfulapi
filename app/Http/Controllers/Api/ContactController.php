@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContactCreateRequest;
+use App\Http\Requests\ContactUpdateRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ContactController extends Controller
 {
@@ -13,25 +16,29 @@ class ContactController extends Controller
         return Contact::where('user_id', $request->user()->id)->latest()->get();
     }
 
-    public function store(Request $request)
+    public function store(ContactCreateRequest $request)
     {
+        $data = $request->validated();
         return Contact::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'user_id' => $request->user()->id,
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+            'user_id' => request()->user()->id,
         ]);
     }
 
     public function show(Contact $contact)
     {
+        Gate::authorize('view', $contact);
         return $contact;
     }
 
-    public function update(Request $request, Contact $contact)
+    public function update(ContactUpdateRequest $request, Contact $contact)
     {
+        Gate::authorize('update', $contact);
+        $data = $request->validated();
         return $contact->update([
-            'name' => $request->name,
-            'phone' => $request->phone,
+            'name' => $data['name'],
+            'phone' => $data['phone'],
         ]);
     }
 

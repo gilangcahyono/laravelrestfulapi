@@ -21,18 +21,20 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        // $data = $request->validated();
-        $user = User::where('email', $request->email)->firstOrFail();
+        $data = $request->validated();
+        $user = User::where('email', $data['email'])->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Username or password is wrong'
+            ], 401);
+        }
         $token =  $user->createToken('auth_token')->plainTextToken;
-        return response()->json([
-            'data' => $user,
-            'token' => $token
-        ]);
+        return response()->json(['token' => $token]);
     }
 
-    public function profile(Request $request)
+    public function user(Request $request)
     {
         return $request->user();
     }

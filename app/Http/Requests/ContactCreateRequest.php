@@ -23,7 +23,7 @@ class ContactCreateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50'],
-            'phone' => ['required', 'string', 'max:15'],
+            'phone' => ['required', 'string', 'max:15', 'unique:contacts'],
             'image' => ['image', 'mimes:png,jpg,jpeg', 'max:2048'],
         ];
     }
