@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Dedoc\Scramble\Scramble;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
