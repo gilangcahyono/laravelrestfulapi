@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ContactCreateRequest extends FormRequest
 {
@@ -26,5 +28,15 @@ class ContactCreateRequest extends FormRequest
             'phone' => ['required', 'string', 'max:15', 'unique:contacts'],
             'image' => ['image', 'mimes:png,jpg,jpeg', 'max:2048'],
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response([
+            'ok' => false,
+            'message' => 'Validation error',
+            'data' => null,
+            "errors" => $validator->getMessageBag()
+        ], 400));
     }
 }
