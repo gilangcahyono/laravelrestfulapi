@@ -15,7 +15,12 @@ class ContactController extends Controller
     public function index(Request $request) // done
     {
         try {
-            $contacts = Contact::where('user_id', $request->user()->id)->latest()->get();
+            $contacts = Contact::where('user_id', $request->user()->id)
+                ->when($request->search, function ($query, $search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                })
+                ->latest()
+                ->get();
             return response()->json([
                 'ok' => true,
                 'message' => 'Data fetched successfully',
@@ -60,9 +65,8 @@ class ContactController extends Controller
 
     public function show(Contact $contact)
     {
-        // Gate::authorize('view', $contact);
-
         try {
+            // Gate::authorize('view', $contact);
             if (Gate::denies('view', $contact)) {
                 return response()->json([
                     'ok' => false,
@@ -92,16 +96,68 @@ class ContactController extends Controller
 
     public function update(ContactUpdateRequest $request, Contact $contact)
     {
-        Gate::authorize('update', $contact);
         $data = $request->validated();
-        return $contact->update([
-            'name' => $data['name'],
-            'phone' => $data['phone'],
-        ]);
+        try {
+            if (Gate::denies('update', $contact)) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Forbidden',
+                    'data' => null,
+                    'errors' => [
+                        'message' => 'You are not authorized to view this contact'
+                    ]
+                ], 403);
+            }
+
+            $contact =  $contact->update([
+                'name' => $data['name'],
+                'phone' => $data['phone'],
+            ]);
+
+            return response()->json([
+                'ok' => true,
+                'message' => 'Contact updated successfully',
+                'data' => $contact,
+                'errors' => null
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Internal server error',
+                'data' => null,
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy(Contact $contact)
     {
-        return $contact->delete();
+        try {
+            if (Gate::denies('delete', $contact)) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Forbidden',
+                    'data' => null,
+                    'errors' => [
+                        'message' => 'You are not authorized to delete this contact'
+                    ]
+                ], 403);
+            }
+            $currentContact = Contact::find($contact->id);
+            $contact->delete();
+            response()->json([
+                'ok' => true,
+                'message' => 'Contact deleted successfully',
+                'data' => $currentContact,
+                'errors' => null
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Internal server error',
+                'data' => null,
+                'errors' => $th->getMessage()
+            ], 500);
+        }
     }
 }

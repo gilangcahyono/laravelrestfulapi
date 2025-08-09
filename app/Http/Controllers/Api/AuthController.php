@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 

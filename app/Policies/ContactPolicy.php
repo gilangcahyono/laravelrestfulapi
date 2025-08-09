@@ -51,16 +51,16 @@ class ContactPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Contact $contact): bool
-    {
-        return false;
-    }
+    // public function restore(User $user, Contact $contact): bool
+    // {
+    //     return false;
+    // }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Contact $contact): bool
-    {
-        return false;
-    }
+    // public function forceDelete(User $user, Contact $contact): bool
+    // {
+    //     return false;
+    // }
 }
