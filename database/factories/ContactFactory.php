@@ -18,7 +18,7 @@ class ContactFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'phone' => fake()->phoneNumber(),
+            'phone' => '08' . fake()->numerify('##########'),
             'image' => fake()->imageUrl(),
         ];
     }
