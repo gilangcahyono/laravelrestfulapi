@@ -6,9 +6,9 @@ RESTful API berbasis Laravel untuk manajemen nomor telepon WhatsApp.
 
 1. Clone repository: `git clone https://github.com/gilangcahyono/laravelrestfulapi.git`
 2. Buka folder: `cd laravelrestfulapi`
-3. Buat file `.env` di root folder lalu salin isi file `.env.example`
-4. Jalankan perintah: `php artisan key:generate`
-5. Jalankan perintah: `php artisan migrate`
+3. Buat file `.env` di root folder lalu salin isi dari file `.env.example`
+4. Generate key aplikasi: `php artisan key:generate`
+5. Migrasi database sekaligus isi dengan data dummy: `php artisan migrate --seed`
 6. Install dependencies: `composer install`
 7. Jalankan server: `php artisan serve`
 
@@ -26,6 +26,7 @@ Anda dapat mengakses dokumentasi API di [http://127.0.0.1:8000/docs/api](http://
 -   CRUD nomor telepon WhatsApp
 -   Autentikasi dengan Sanctum
 -   Authorisasi dengan Laravel Policy
+-   Upload file
 
 ## Catatan
 
